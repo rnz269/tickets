@@ -1,0 +1,16 @@
+# to mirror file name
+name: tests
+
+# determines when we run this workflow: whenever we create, reopen or update pull request
+on:
+  pull_request
+
+# jobs section will define workflow: a number of things to do
+# we want to start up a container on a VM, run on ubuntu os, and first step we want to do is use all the code out of our project
+# we'll then set up a series of commands to run inside project -- for now, run all tests in auth service
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd auth && npm install && npm run test:ci
