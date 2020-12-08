@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-mongo-depl
+# spec describes deployment config: # of pods in set, selector describes which pods to manage (based off payments id)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-mongo
+  # template describes how pods set should be created by deployment
+  template:
+    metadata:
+      # applies identifier to pods set
+      labels:
+        app: payments-mongo
+    # spec describes containers to create within each pod
+    spec:
+      containers:
+        - name: payments-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-mongo-srv
+spec:
+  type: ClusterIP
+  # which set of pods to expose (app: payments)
+  selector:
+    app: payments-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

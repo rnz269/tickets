@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+# spec describes deployment config: # of pods in set, selector describes which pods to manage (based off auth id)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  # template describes how pods set should be created by deployment
+  template:
+    metadata:
+      # applies identifier to pods set
+      labels:
+        app: auth
+    # spec describes containers to create within each pod
+    spec:
+      containers:
+        - name: auth
+          image: rnz269/auth
+          # env is an array where we list env variables, which code within auth container
+          # can access by name, e.g. JWT_KEY.
+          # Value is grabbed from k8s Secret object we just created with CLI
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  type: ClusterIP
+  # which set of pods to expose (app: auth)
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

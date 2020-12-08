@@ -1,0 +1,69 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  # tells skaffold there's a collection of different config files
+  # intended for k8s inside specified directory. Telling skaffold to
+  # watch these files. anytime we make a change to one of these
+  # files, skaffold will auto apply that config file to our k8s cluster
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    # skaffold defaults to pushing rebuilt image to docker hub
+    # we don't need this behavior with skaffold
+    push: false
+  artifacts:
+    # tells skaffold for code running out of auth directory,
+    # when change is made to a src/.ts file, copy that code and paste
+    # into pod so that pod always has latest code
+    # for changes to non js. files, rebuild image & update deployment
+    # context is folder that contains the image's code, dest is where to sync to inside container
+    - image: rnz269/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: rnz269/ticket-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+    - image: rnz269/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: rnz269/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: rnz269/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: rnz269/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

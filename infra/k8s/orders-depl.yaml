@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+# spec describes deployment config: # of pods in set, selector describes which pods to manage (based off orders id)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  # template describes how pods set should be created by deployment
+  template:
+    metadata:
+      # applies identifier to pods set
+      labels:
+        app: orders
+    # spec describes containers to create within each pod
+    spec:
+      containers:
+        - name: orders
+          image: rnz269/orders
+          # env is an array where we list env variables, which code within orders container
+          # can access by name, e.g. process.env.MONGO_URI.
+          env:
+            # grabs the pod instance's name, guaranteed to be unique
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'ticketing'
+            - name: MONGO_URI
+              value: 'mongodb://orders-mongo-srv:27017/orders'
+            # Value is grabbed from k8s Secret object we created with CLI
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-srv
+spec:
+  type: ClusterIP
+  # which set of pods to expose (app: orders)
+  selector:
+    app: orders
+  ports:
+    - name: orders
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
