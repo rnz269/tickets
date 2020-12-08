@@ -1,5 +1,5 @@
 # to mirror file name
-name: tests
+name: tests-auth
 
 # determines when we run this workflow: whenever we create, reopen or update pull request
 on:
