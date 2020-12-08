@@ -8,6 +8,7 @@ import { PaymentCreatedListener } from './events/listeners/payment-created-liste
 
 /*****  Starts up Express Application *****/
 const start = async () => {
+  console.log('Starting up...');
   // checks for env variables to appease TS
   if (!process.env.JWT_KEY) {
     throw new Error('JWT_KEY must be defined');
