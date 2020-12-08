@@ -3,7 +3,7 @@ import { app } from './app';
 
 /*****  Starts up Express Application *****/
 const start = async () => {
-  console.log('Starting up...');
+  console.log('Starting up application...');
 
   if (!process.env.JWT_KEY) {
     throw new Error('Requested environment variable does not exist');
