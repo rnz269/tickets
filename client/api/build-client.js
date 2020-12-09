@@ -10,9 +10,9 @@ import axios from 'axios';
 export default function buildClient({ req }) {
   if (typeof window === 'undefined') {
     // we're on the server, so requests should be made to long url
+    // on dev: 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
     return axios.create({
-      baseURL:
-        'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
+      baseURL: 'http://www.ticketing-app.club/',
       headers: req.headers,
     });
   } else {
