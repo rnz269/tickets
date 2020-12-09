@@ -19,7 +19,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false, // disable encryption on cookie, since jwt is encrypted
-    secure: process.env.NODE_ENV !== 'test', // (jest auto-sets NODE_ENV to test) cookies only used if user visiting our app over https connection
+    secure: false, // process.env.NODE_ENV !== 'test', // (jest auto-sets NODE_ENV to test) cookies only used if user visiting our app over https connection
   })
 );
 
