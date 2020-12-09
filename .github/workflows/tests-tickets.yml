@@ -3,7 +3,7 @@ name: tests-tickets
 
 # determines when we run this workflow: whenever we create, reopen or update pull request
 on:
-  pull_request
+  pull_request:
     paths:
       - 'tickets/**' # if pull_request AND any file in tickets directory has changed, then run below job
 
