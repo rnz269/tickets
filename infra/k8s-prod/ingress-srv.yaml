@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
-    - host: ticketing.dev # come back and change once we've purchased a domain name
+    - host: www.ticketing-app.club
       http:
         paths:
           - path: /api/users/?(.*)
