@@ -4,6 +4,8 @@ name: tests-orders
 # determines when we run this workflow: whenever we create, reopen or update pull request
 on:
   pull_request
+    paths:
+      - 'orders/**' # if pull_request AND any file in orders directory has changed, then run below job
 
 # jobs section will define workflow: a number of things to do
 # we want to start up a container on a VM, run on ubuntu os, and first step we want to do is use all the code out of our project
