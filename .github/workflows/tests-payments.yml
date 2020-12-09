@@ -9,7 +9,7 @@ on:
 
 # jobs section will define workflow: a number of things to do
 # we want to start up a container on a VM, run on ubuntu os, and first step we want to do is use all the code out of our project
-# we'll then set up a series of commands to run inside project -- for now, run all tests in auth service
+# we'll then set up a series of commands to run inside project -- for now, run all tests in payments service
 jobs:
   build:
     runs-on: ubuntu-latest
